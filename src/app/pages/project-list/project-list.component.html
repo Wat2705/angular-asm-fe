@@ -1,0 +1,42 @@
+<a routerLink="/add">
+    <button nz-button nzType="primary">Add</button>
+</a>
+<br />
+<br />
+<nz-table #basicTable [nzData]="listOfData" [nzPageSize]="5" [nzPaginationType]="'small'">
+    <thead>
+        <tr>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Start Date</th>
+            <th>Team Size</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Img</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (data of basicTable.data; track data.key) {
+        <tr (click)="info(data)">
+            <td>{{ data._id }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.startDate }}</td>
+            <td>{{data.teamSize}}</td>
+            <td>$ {{data.price}}</td>
+            <td>{{data.description}}</td>
+            <td>
+                <img style="width: 50px; height: 50px;" src="https://picsum.photos/id/1/200/300" alt="">
+            </td>
+            <td (click)="$event.stopPropagation()">
+                <a [routerLink]="['/edit', data._id]">Edit</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc không?" nzOkText="OK" nzCancelText="Cancel"
+                    (nzOnConfirm)="confirm(data._id)" (nzOnCancel)="cancel()">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

@@ -1,0 +1,38 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Project Name</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Không được để trống tên dự án!">
+            <input nz-input formControlName="projectName" style="width: 50%;" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Start Date</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Không được để trống ngày bắt đầu dự án!">
+            <nz-date-picker formControlName="datePicker"></nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7">Team Size</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <nz-input-number formControlName="teamSize" [nzMin]="1" [nzMax]="10" [nzStep]="1"></nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Price</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <input nz-input formControlName="price" style="width: 50%;" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7">Description</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <textarea rows="4" formControlName="desc" nz-input></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+            <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
+            <button nz-button (click)="resetForm($event)">Reset</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
