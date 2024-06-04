@@ -3,12 +3,13 @@ import {
   MenuFoldOutline,
   MenuUnfoldOutline,
   DashboardOutline,
-  FileAddOutline
+  FileAddOutline,
+  PlusOutline
 } from '@ant-design/icons-angular/icons';
 
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
-const icons = [MenuFoldOutline, MenuUnfoldOutline, DashboardOutline, FileAddOutline];
+const icons = [MenuFoldOutline, MenuUnfoldOutline, DashboardOutline, FileAddOutline, PlusOutline];
 
 export function provideNzIcons(): EnvironmentProviders {
   return importProvidersFrom(NzIconModule.forRoot(icons));

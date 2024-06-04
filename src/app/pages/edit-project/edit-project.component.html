@@ -30,6 +30,18 @@
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
+        <nz-form-label [nzSpan]="7">Image</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <nz-upload [(nzFileList)]="fileList" [nzRemove]="handleRemove" [nzBeforeUpload]="beforeUpload">
+                <button *ngIf="!previewImage" type="button" nz-button>
+                    <span nz-icon nzType="upload"></span>
+                    Select File
+                </button>
+                <img *ngIf="previewImage" #uploadImage class="object-contain w-24 h-24" alt="">
+            </nz-upload>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
         <nz-form-control [nzOffset]="7" [nzSpan]="12">
             <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
             <button nz-button (click)="resetForm($event)">Reset</button>

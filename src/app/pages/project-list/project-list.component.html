@@ -26,7 +26,10 @@
             <td>$ {{data.price}}</td>
             <td>{{data.description}}</td>
             <td>
-                <img style="width: 50px; height: 50px;" src="https://picsum.photos/id/1/200/300" alt="">
+                @if (data.image != undefined) {
+                <img (click)="$event.stopPropagation()" nz-image width="200px" height="200px"
+                    nzSrc="http://localhost:3000/{{data.image.path}}">
+                }
             </td>
             <td (click)="$event.stopPropagation()">
                 <a [routerLink]="['/edit', data._id]">Edit</a>

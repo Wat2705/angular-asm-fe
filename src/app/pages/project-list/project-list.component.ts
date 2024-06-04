@@ -1,19 +1,30 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { ProjectService } from '../../project.service';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 @Component({
   selector: 'app-project-list',
   standalone: true,
-  imports: [NzTableModule, NzModalModule, NzDividerModule, NzButtonModule, NzIconModule, RouterLink, NzPopconfirmModule],
+  imports: [
+    NzTableModule,
+    NzModalModule,
+    NzDividerModule,
+    NzButtonModule,
+    NzIconModule,
+    RouterLink,
+    NzPopconfirmModule,
+    CommonModule,
+    NzImageModule
+  ],
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss'
 })
@@ -22,10 +33,11 @@ export class ProjectListComponent {
   listOfData: any = []
   isVisible = false;
 
-  constructor(private http: HttpClient, private message: NzMessageService, private modal: NzModalService) { }
+  constructor(private service: ProjectService, private message: NzMessageService, private modal: NzModalService) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/project').subscribe(res => {
+    this.service.getAll().subscribe(res => {
+      console.log(res)
       this.listOfData = res
     })
   }
@@ -35,7 +47,7 @@ export class ProjectListComponent {
   }
 
   confirm(id: string): void {
-    this.http.delete(`http://localhost:3000/project/${id}`)
+    this.service.delete(id)
       .subscribe(
         (res: any) => {
           this.listOfData = this.listOfData.filter((e: any) => e._id != id)
@@ -56,7 +68,7 @@ export class ProjectListComponent {
         <p>Team Size: ${data.teamSize}</p>
         <p>Price: ${data.price}</p>
         <p>Description: ${data.description}</p>
-        <img src='https://picsum.photos/id/1/200/300'/>
+        ${data.image != undefined ? `<img class='object-cover' src='${data.image.base64}'/>` : ''}
       `,
     });
   }

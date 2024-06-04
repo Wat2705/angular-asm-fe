@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -13,10 +14,36 @@ import dayjs from 'dayjs';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
+import { ProjectService } from '../../project.service';
+
+function resizeBase64Image(base64Image: any, type: any) {
+  return new Promise((resolve, reject) => {
+    const maxSizeInMB = 1;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+    const img = new Image();
+    img.src = base64Image;
+    img.onload = function () {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext('2d');
+      const width = img.width;
+      const height = img.height;
+      const aspectRatio = width / height;
+      const newWidth = Math.sqrt(maxSizeInBytes * aspectRatio);
+      const newHeight = Math.sqrt(maxSizeInBytes / aspectRatio);
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      ctx?.drawImage(img, 0, 0, newWidth, newHeight);
+      let quality = 0.8;
+      let dataURL = canvas.toDataURL(type, quality);
+      resolve(dataURL);
+    };
+  });
+}
 
 @Component({
   selector: 'app-add-project',
@@ -29,13 +56,20 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
     NzDatePickerModule,
     NzInputNumberModule,
     FormsModule,
-    NzNotificationModule
+    NzNotificationModule,
+    NzUploadModule,
+    NzIconModule,
+    CommonModule
   ],
   templateUrl: './add-project.component.html',
   styleUrl: './add-project.component.scss'
 })
 
 export class AddProjectComponent {
+  @ViewChild('uploadImage') uploadImage: any;
+  avatarUrl?: string;
+  fileData?: any;
+
   validateForm: FormGroup<{
     projectName: FormControl<string>;
     datePicker: FormControl<string>;
@@ -44,24 +78,66 @@ export class AddProjectComponent {
     desc: FormControl<string>;
   }>;
 
+  constructor(
+    private fb: NonNullableFormBuilder,
+    private service: ProjectService,
+    private router: Router,
+    private notification: NzNotificationService,
+    private http: HttpClient
+  ) {
+    this.validateForm = this.fb.group({
+      projectName: ['', [Validators.required]],
+      datePicker: ['', [Validators.required]],
+      teamSize: [1, [Validators.min(1), Validators.max(10)]],
+      price: ['', [Validators.required]],
+      desc: [''],
+    });
+  }
+
   submitForm(): void {
-    this.http.post('http://localhost:3000/project', {
-      name: this.validateForm.value.projectName,
-      startDate: dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
-      teamSize: this.validateForm.value.teamSize,
-      price: this.validateForm.value.price,
-      description: this.validateForm.value.desc
-    }).subscribe(
-      (res: any) => {
-        if (res.message == 'ok') {
-          this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-          this.router.navigate(['/home'])
+    if (this.avatarUrl != undefined) {
+      let formData = new FormData();
+      formData.append('image', this.fileData)
+      this.http.post('http://localhost:3000/image', formData).subscribe((res: any) => {
+        this.service.create(
+          this.validateForm.value.projectName,
+          dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
+          this.validateForm.value.price,
+          this.validateForm.value.teamSize,
+          this.validateForm.value.desc,
+          res['id']
+        ).subscribe(
+          (res: any) => {
+            if (res.message == 'ok') {
+              this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
+              this.router.navigate(['/home'])
+            }
+          },
+          (err: any) => {
+            this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
+          }
+        )
+      })
+    } else {
+      this.service.create(
+        this.validateForm.value.projectName,
+        dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
+        this.validateForm.value.price,
+        this.validateForm.value.teamSize,
+        this.validateForm.value.desc,
+        null
+      ).subscribe(
+        (res: any) => {
+          if (res.message == 'ok') {
+            this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
+            this.router.navigate(['/home'])
+          }
+        },
+        (err: any) => {
+          this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
         }
-      },
-      (err: any) => {
-        this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
-      }
-    )
+      )
+    }
   }
 
   resetForm(e: MouseEvent): void {
@@ -69,18 +145,22 @@ export class AddProjectComponent {
     this.validateForm.reset();
   }
 
-  constructor(
-    private fb: NonNullableFormBuilder,
-    private http: HttpClient,
-    private router: Router,
-    private notification: NzNotificationService
-  ) {
-    this.validateForm = this.fb.group({
-      projectName: ['', [Validators.required]],
-      datePicker: ['', [Validators.required]],
-      teamSize: [1, [Validators.min(1), Validators.max(10)]],
-      price: ['', [Validators.required]],
-      desc: ['']
+  private getBase64(img: any, callback: (img: string) => void): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result!.toString()));
+    reader.readAsDataURL(img);
+  }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.getBase64(file, (img: string) => {
+      this.avatarUrl = img;
+      this.fileData = file;
     });
+    return false;
+  };
+
+  handleRemove = (): any => {
+    this.avatarUrl = ''
+    this.fileData = null
   }
 }
