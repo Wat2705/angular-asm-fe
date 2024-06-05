@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -20,30 +20,6 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { ProjectService } from '../../project.service';
-
-function resizeBase64Image(base64Image: any, type: any) {
-  return new Promise((resolve, reject) => {
-    const maxSizeInMB = 1;
-    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-    const img = new Image();
-    img.src = base64Image;
-    img.onload = function () {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext('2d');
-      const width = img.width;
-      const height = img.height;
-      const aspectRatio = width / height;
-      const newWidth = Math.sqrt(maxSizeInBytes * aspectRatio);
-      const newHeight = Math.sqrt(maxSizeInBytes / aspectRatio);
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      ctx?.drawImage(img, 0, 0, newWidth, newHeight);
-      let quality = 0.8;
-      let dataURL = canvas.toDataURL(type, quality);
-      resolve(dataURL);
-    };
-  });
-}
 
 @Component({
   selector: 'app-add-project',
@@ -66,7 +42,6 @@ function resizeBase64Image(base64Image: any, type: any) {
 })
 
 export class AddProjectComponent {
-  @ViewChild('uploadImage') uploadImage: any;
   avatarUrl?: string = '';
   fileData?: any;
 
@@ -95,6 +70,7 @@ export class AddProjectComponent {
   }
 
   submitForm(): void {
+    console.log(this.validateForm.value.teamSize)
     if (this.avatarUrl != '') {
       let formData = new FormData();
       formData.append('image', this.fileData)
@@ -102,8 +78,8 @@ export class AddProjectComponent {
         this.service.create(
           this.validateForm.value.projectName,
           dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
-          this.validateForm.value.price,
           this.validateForm.value.teamSize,
+          this.validateForm.value.price,
           this.validateForm.value.desc,
           res['id']
         ).subscribe(
@@ -114,6 +90,7 @@ export class AddProjectComponent {
             }
           },
           (err: any) => {
+            console.log(err)
             this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
           }
         )
@@ -122,8 +99,8 @@ export class AddProjectComponent {
       this.service.create(
         this.validateForm.value.projectName,
         dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
-        this.validateForm.value.price,
         this.validateForm.value.teamSize,
+        this.validateForm.value.price,
         this.validateForm.value.desc,
         null
       ).subscribe(

@@ -38,7 +38,6 @@ export class ProjectListComponent {
 
   ngOnInit(): void {
     this.service.getAll().subscribe(res => {
-      console.log(res)
       this.listOfData = res
     })
   }

@@ -23,8 +23,8 @@ export class ProjectService {
     })
   }
 
-  edit(id: any, name: any, startDate: any, teamSize: any, price: any, description: any, image: any = '') {
-    return this.http.post(`http://localhost:3000/project/${id}`, {
+  edit(id: any, name: any, startDate: any, teamSize: any, price: any, description: any, image: any) {
+    return this.http.put(`http://localhost:3000/project/${id}`, {
       name,
       startDate,
       teamSize,

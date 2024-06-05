@@ -32,13 +32,16 @@
     <nz-form-item>
         <nz-form-label [nzSpan]="7">Image</nz-form-label>
         <nz-form-control [nzSpan]="12">
-            <nz-upload [(nzFileList)]="fileList" [nzRemove]="handleRemove" [nzBeforeUpload]="beforeUpload">
-                <button *ngIf="!previewImage" type="button" nz-button>
-                    <span nz-icon nzType="upload"></span>
-                    Select File
-                </button>
-                <img *ngIf="previewImage" #uploadImage class="object-contain w-24 h-24" alt="">
+            <nz-upload class="avatar-uploader" nzName="avatar" nzListType="picture-card" [nzShowButton]="true"
+                [nzBeforeUpload]="beforeUpload">
+                <ng-container *ngIf="!avatarUrl">
+                    <span class="upload-icon" nz-icon [nzType]="'plus'"></span>
+                    <div class="ant-upload-text">Upload</div>
+                </ng-container>
+                <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" />
             </nz-upload>
+            <button class="absolute left-40 bottom-16" (click)="handleRemove()" *ngIf="avatarUrl" nz-button
+                type="button">Remove</button>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

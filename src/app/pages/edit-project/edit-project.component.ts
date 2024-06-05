@@ -22,31 +22,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { ProjectService } from '../../project.service';
 
-
-function resizeBase64Image(base64Image: any, type: any) {
-  return new Promise((resolve, reject) => {
-    const maxSizeInMB = 1;
-    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
-    const img = new Image();
-    img.src = base64Image;
-    img.onload = function () {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext('2d');
-      const width = img.width;
-      const height = img.height;
-      const aspectRatio = width / height;
-      const newWidth = Math.sqrt(maxSizeInBytes * aspectRatio);
-      const newHeight = Math.sqrt(maxSizeInBytes / aspectRatio);
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      ctx?.drawImage(img, 0, 0, newWidth, newHeight);
-      let quality = 0.8;
-      let dataURL = canvas.toDataURL(type, quality);
-      resolve(dataURL);
-    };
-  });
-}
-
 @Component({
   selector: 'app-edit-project',
   standalone: true,
@@ -69,11 +44,11 @@ function resizeBase64Image(base64Image: any, type: any) {
 
 export class EditProjectComponent {
   @Input() id = '';
-  @ViewChild('uploadImage') uploadImage: any;
   project: any;
-  imageUrl: any = '';
-  fileList: NzUploadFile[] = [];
-  previewImage: any = false;
+  avatarUrl?: string = '';
+  fileData?: any;
+  imageChange: boolean = false;
+  oldImageID: string = '';
 
   validateForm: FormGroup<{
     projectName: FormControl<string>;
@@ -83,30 +58,44 @@ export class EditProjectComponent {
     desc: FormControl<string>;
   }>;
 
+  toDataURL(url: string, callback: any) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+
   submitForm(): void {
     if (
       this.validateForm.value.projectName?.trim() != this.project.name ||
       dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD') != this.project.startDate ||
       this.validateForm.value.teamSize != this.project.teamSize ||
-      this.validateForm.value.price != this.project.price
+      this.validateForm.value.price != this.project.price ||
+      this.imageChange
     ) {
-      if (this.previewImage) {
-        this.http.post('http://localhost:3000/image', {
-          name: this.fileList[0].name,
-          base64: this.imageUrl
-        }).subscribe((res: any) => {
+      if (this.avatarUrl != '' && this.imageChange) {
+        let formData = new FormData();
+        formData.append('image', this.fileData)
+        this.http.post('http://localhost:3000/image', formData).subscribe((res: any) => {
           this.service.edit(
             this.id,
             this.validateForm.value.projectName,
             dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
-            this.validateForm.value.price,
             this.validateForm.value.teamSize,
+            this.validateForm.value.price,
             this.validateForm.value.desc,
             res['id']
           ).subscribe(
             (res: any) => {
               if (res.message == 'ok') {
-                this.notification.create('success', 'Sửa thành công!', '', { nzDuration: 1000 });
+                this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
                 this.router.navigate(['/home'])
               }
             },
@@ -115,18 +104,39 @@ export class EditProjectComponent {
             }
           )
         })
+      } else if (this.avatarUrl == '' && this.imageChange) {
+        this.service.edit(
+          this.id,
+          this.validateForm.value.projectName,
+          dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
+          this.validateForm.value.teamSize,
+          this.validateForm.value.price,
+          this.validateForm.value.desc,
+          null
+        ).subscribe(
+          (res: any) => {
+            if (res.message == 'ok') {
+              this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
+              this.router.navigate(['/home'])
+            }
+          },
+          (err: any) => {
+            this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
+          }
+        )
       } else {
         this.service.edit(
           this.id,
           this.validateForm.value.projectName,
           dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),
-          this.validateForm.value.price,
           this.validateForm.value.teamSize,
+          this.validateForm.value.price,
           this.validateForm.value.desc,
+          this.oldImageID
         ).subscribe(
           (res: any) => {
             if (res.message == 'ok') {
-              this.notification.create('success', 'Sửa thành công!', '', { nzDuration: 1000 });
+              this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
               this.router.navigate(['/home'])
             }
           },
@@ -150,7 +160,7 @@ export class EditProjectComponent {
     private http: HttpClient,
     private router: Router,
     private notification: NzNotificationService,
-    private service: ProjectService
+    private service: ProjectService,
   ) {
     this.validateForm = this.fb.group({
       projectName: ['', [Validators.required]],
@@ -163,19 +173,17 @@ export class EditProjectComponent {
 
   ngOnInit(): void {
     this.http.get(`http://localhost:3000/project/${this.id}`).subscribe((res: any) => {
+      this.oldImageID = res?.image?._id
       this.project = res
       this.validateForm.get('projectName')?.setValue(res.name)
       this.validateForm.get('datePicker')?.setValue(new Date(res.startDate))
       this.validateForm.get('teamSize')?.setValue(res.teamSize)
       this.validateForm.get('price')?.setValue(res.price)
       this.validateForm.get('desc')?.setValue(res.description)
-      if (res?.image?.base64 != undefined) {
-        setTimeout(() => {
-          this.uploadImage.nativeElement.src = res.image.base64;
-        }, 1)
-        // this.fileList
-        this.imageUrl = res.image.base64;
-        this.previewImage = true;
+      if (res?.image?.path != undefined) {
+        this.toDataURL(`http://localhost:3000/${res.image.path}`, (dataUrl: any) => {
+          this.avatarUrl = dataUrl
+        })
       }
     })
   }
@@ -187,19 +195,17 @@ export class EditProjectComponent {
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
-    this.fileList = [file]
-    this.previewImage = true
     this.getBase64(file, (img: string) => {
-      resizeBase64Image(img, file.type).then(data => {
-        this.uploadImage.nativeElement.src = data;
-        this.imageUrl = data
-      })
-    })
+      this.avatarUrl = img;
+      this.fileData = file;
+      this.imageChange = true
+    });
     return false;
   };
 
   handleRemove = (): any => {
-    this.fileList = [];
-    this.previewImage = false
+    this.avatarUrl = ''
+    this.fileData = null
+    this.imageChange = true
   }
 }
