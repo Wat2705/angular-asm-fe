@@ -40,8 +40,8 @@
                 </ng-container>
                 <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" />
             </nz-upload>
-            <button (click)="handleRemove()" *ngIf="avatarUrl" nz-button type="button"
-                style="position: relative;float: left; left: 200px; bottom: 90px;">Remove</button>
+            <button class="absolute left-40 bottom-16" (click)="handleRemove()" *ngIf="avatarUrl" nz-button
+                type="button">Remove</button>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>

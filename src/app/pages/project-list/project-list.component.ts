@@ -10,6 +10,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ProjectService } from '../../project.service';
 import { NzImageModule } from 'ng-zorro-antd/image';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-project-list',
@@ -33,7 +34,7 @@ export class ProjectListComponent {
   listOfData: any = []
   isVisible = false;
 
-  constructor(private service: ProjectService, private message: NzMessageService, private modal: NzModalService) { }
+  constructor(private service: ProjectService, private message: NzMessageService, private modal: NzModalService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.service.getAll().subscribe(res => {

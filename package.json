@@ -36,7 +36,7 @@
     "@angular/compiler-cli": "^17.3.10",
     "@types/express": "^4.17.21",
     "@types/jasmine": "~5.1.4",
-    "@types/node": "^18.19.33",
+    "@types/node": "^18.19.34",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~5.1.2",
     "karma": "~6.4.3",

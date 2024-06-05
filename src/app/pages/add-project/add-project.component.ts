@@ -67,7 +67,7 @@ function resizeBase64Image(base64Image: any, type: any) {
 
 export class AddProjectComponent {
   @ViewChild('uploadImage') uploadImage: any;
-  avatarUrl?: string;
+  avatarUrl?: string = '';
   fileData?: any;
 
   validateForm: FormGroup<{
@@ -95,7 +95,7 @@ export class AddProjectComponent {
   }
 
   submitForm(): void {
-    if (this.avatarUrl != undefined) {
+    if (this.avatarUrl != '') {
       let formData = new FormData();
       formData.append('image', this.fileData)
       this.http.post('http://localhost:3000/image', formData).subscribe((res: any) => {
