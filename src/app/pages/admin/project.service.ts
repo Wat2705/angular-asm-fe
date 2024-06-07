@@ -12,6 +12,10 @@ export class ProjectService {
     return this.http.get(this.url)
   }
 
+  getOne(id: string) {
+    return this.http.get(this.url + '/' + id)
+  }
+
   create(name: any, startDate: any, teamSize: any, price: any, description: any, image: any = '') {
     return this.http.post('http://localhost:3000/project', {
       name,
@@ -36,5 +40,9 @@ export class ProjectService {
 
   delete(id: any) {
     return this.http.delete(`http://localhost:3000/project/${id}`)
+  }
+
+  uploadImage(data: any) {
+    return this.http.post('http://localhost:3000/image', data)
   }
 }

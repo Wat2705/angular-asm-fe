@@ -1,5 +1,5 @@
+import { ProjectService } from '@/app/pages/admin/project.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import {
   FormControl,
@@ -19,7 +19,6 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
-import { ProjectService } from '@/app/project.service';
 
 @Component({
   selector: 'app-add-project',
@@ -58,7 +57,6 @@ export class AddProjectComponent {
     private service: ProjectService,
     private router: Router,
     private notification: NzNotificationService,
-    private http: HttpClient
   ) {
     this.validateForm = this.fb.group({
       projectName: ['', [Validators.required]],
@@ -73,7 +71,7 @@ export class AddProjectComponent {
     if (this.avatarUrl != '') {
       let formData = new FormData();
       formData.append('image', this.fileData)
-      this.http.post('http://localhost:3000/image', formData).subscribe((res: any) => {
+      this.service.uploadImage(formData).subscribe((res: any) => {
         this.service.create(
           this.validateForm.value.projectName,
           dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD'),

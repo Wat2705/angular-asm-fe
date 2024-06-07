@@ -1,5 +1,5 @@
 import { AuthService } from '@/app/auth/auth.service';
-import { ProjectService } from '@/app/project.service';
+import { ProjectService } from '@/app/pages/admin/project.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {

@@ -1,6 +1,7 @@
+import { ProjectService } from '@/app/pages/admin/project.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, Input, ViewChild } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, Input } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -17,10 +18,8 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
-import { ProjectService } from '@/app/project.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -84,7 +83,7 @@ export class EditProjectComponent {
       if (this.avatarUrl != '' && this.imageChange) {
         let formData = new FormData();
         formData.append('image', this.fileData)
-        this.http.post('http://localhost:3000/image', formData).subscribe((res: any) => {
+        this.service.uploadImage(formData).subscribe((res: any) => {
           this.service.edit(
             this.id,
             this.validateForm.value.projectName,
@@ -158,7 +157,6 @@ export class EditProjectComponent {
 
   constructor(
     private fb: NonNullableFormBuilder,
-    private http: HttpClient,
     private router: Router,
     private notification: NzNotificationService,
     private service: ProjectService,
@@ -173,7 +171,7 @@ export class EditProjectComponent {
   }
 
   ngOnInit(): void {
-    this.http.get(`http://localhost:3000/project/${this.id}`).subscribe((res: any) => {
+    this.service.getOne(this.id).subscribe((res: any) => {
       this.oldImageID = res?.image?._id
       this.project = res
       this.validateForm.get('projectName')?.setValue(res.name)

@@ -1,16 +1,15 @@
+import { ProjectService } from '@/app/pages/admin/project.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzImageModule } from 'ng-zorro-antd/image';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { ProjectService } from '@/app/project.service';
-import { NzImageModule } from 'ng-zorro-antd/image';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-project-list',
@@ -34,7 +33,11 @@ export class ProjectListComponent {
   listOfData: any = []
   isVisible = false;
 
-  constructor(private service: ProjectService, private message: NzMessageService, private modal: NzModalService, private http: HttpClient) { }
+  constructor(
+    private service: ProjectService,
+    private message: NzMessageService,
+    private modal: NzModalService,
+  ) { }
 
   ngOnInit(): void {
     this.service.getAll().subscribe(res => {

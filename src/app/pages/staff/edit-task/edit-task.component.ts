@@ -1,5 +1,5 @@
 import { AuthService } from '@/app/auth/auth.service';
-import { ProjectService } from '@/app/project.service';
+import { ProjectService } from '@/app/pages/admin/project.service';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
@@ -122,5 +122,4 @@ export class EditTaskComponent {
     e.preventDefault();
     this.validateForm.reset();
   }
-
 }
