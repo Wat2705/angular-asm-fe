@@ -1,0 +1,61 @@
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="user">
+                <input type="text" nz-input formControlName="userName" placeholder="Tài khoản" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your nickname!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="info-circle">
+                <input type="text" nz-input formControlName="name" placeholder="Nickname" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="The input is not valid E-mail!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="mail">
+                <input type="text" nz-input formControlName="email" placeholder="Email" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                <input (ngModelChange)="updateConfirmValidator()" [type]="passwordVisible ? 'text' : 'password'"
+                    nz-input placeholder="Mật khẩu" formControlName="password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                    (click)="passwordVisible = !passwordVisible"></span>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="lock">
+                <input type="password" nz-input placeholder="Nhập lại mật khẩu" formControlName="rePassword" />
+            </nz-input-group>
+            <ng-template #errorTpl let-control>
+                @if (control.errors?.['required']) {
+                Please confirm your password!
+                }
+                @if (control.errors?.['confirm']) {
+                Two passwords that you enter is inconsistent!
+                }
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please select your role!">
+            <nz-select formControlName="role" class="rounded-lg py-2" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select a role">
+                <nz-option nzLabel="Nhân viên" nzValue="nhanvien"></nz-option>
+                <nz-option nzLabel="Leader" nzValue="leader"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <button nz-button class="login-form-button login-form-margin rounded-lg text-base py-2 px-4 h-full"
+        [nzType]="'primary'">Đăng ký</button>
+</form>

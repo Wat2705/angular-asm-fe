@@ -19,7 +19,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
-import { ProjectService } from '../../project.service';
+import { ProjectService } from '@/app/project.service';
 
 @Component({
   selector: 'app-add-project',

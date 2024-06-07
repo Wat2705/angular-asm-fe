@@ -2,7 +2,7 @@
     <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Project Name</nz-form-label>
         <nz-form-control [nzSpan]="12" nzErrorTip="Không được để trống tên dự án!">
-            <input nz-input formControlName="projectName" style="width: 50%;" />
+            <input class="w-1/2" nz-input formControlName="projectName" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -20,13 +20,13 @@
     <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Price</nz-form-label>
         <nz-form-control [nzSpan]="12">
-            <input nz-input formControlName="price" style="width: 50%;" />
+            <input class="w-1/2" nz-input formControlName="price" />
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-label [nzSpan]="7">Description</nz-form-label>
         <nz-form-control [nzSpan]="12">
-            <textarea rows="4" formControlName="desc" nz-input></textarea>
+            <textarea class="w-1/2" rows="4" formControlName="desc" nz-input></textarea>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -38,7 +38,7 @@
                     <span class="upload-icon" nz-icon [nzType]="'plus'"></span>
                     <div class="ant-upload-text">Upload</div>
                 </ng-container>
-                <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" />
+                <img class="w-full h-full object-cover" *ngIf="avatarUrl" [src]="avatarUrl" />
             </nz-upload>
             <button class="absolute left-40 bottom-16" (click)="handleRemove()" *ngIf="avatarUrl" nz-button
                 type="button">Remove</button>

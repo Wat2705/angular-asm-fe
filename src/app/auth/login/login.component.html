@@ -1,0 +1,23 @@
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="user">
+                <input type="text" nz-input formControlName="userName" placeholder="Tài khoản" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group class="rounded-lg text-base py-2 px-3" nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                <input [type]="passwordVisible ? 'text' : 'password'" nz-input placeholder="Mật khẩu"
+                    formControlName="password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+                <span nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                    (click)="passwordVisible = !passwordVisible"></span>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    <button nz-button class="login-form-button login-form-margin rounded-lg text-base py-2 px-4 h-full"
+        [nzType]="'primary'">Đăng nhập</button>
+</form>

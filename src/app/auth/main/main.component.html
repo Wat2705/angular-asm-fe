@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center">
+    <div class="flex mb-5">
+        <span class="w-11 h-11 mr-4">
+            <img class="w-full" src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+        </span>
+        <span class="font-semibold text-3xl"
+            style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">Quản
+            lý dự án FPOLY</span>
+    </div>
+    <ul nz-menu nzMode="horizontal" class="mb-5">
+        <li nz-menu-item [nzMatchRouter]='true'>
+            <a routerLink="login" rel="noopener noreferrer">Đăng nhập</a>
+        </li>
+        <li nz-menu-item [nzMatchRouter]="true">
+            <a routerLink="register" rel="noopener noreferrer">Đăng ký</a>
+        </li>
+    </ul>
+    <router-outlet></router-outlet>
+</div>

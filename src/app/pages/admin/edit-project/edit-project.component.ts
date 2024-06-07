@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
 import {
   FormControl,
@@ -20,7 +20,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
-import { ProjectService } from '../../project.service';
+import { ProjectService } from '@/app/project.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -36,7 +36,8 @@ import { ProjectService } from '../../project.service';
     NzNotificationModule,
     CommonModule,
     NzUploadModule,
-    NzIconModule
+    NzIconModule,
+    HttpClientModule
   ],
   templateUrl: './edit-project.component.html',
   styleUrl: './edit-project.component.scss'

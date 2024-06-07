@@ -8,7 +8,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { ProjectService } from '../../project.service';
+import { ProjectService } from '@/app/project.service';
 import { NzImageModule } from 'ng-zorro-antd/image';
 import { HttpClient } from '@angular/common/http';
 
