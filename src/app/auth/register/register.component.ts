@@ -61,6 +61,8 @@ export class RegisterComponent {
     if (this.validateForm.valid) {
       this.auth.register(this.validateForm.value).subscribe((res: any) => {
         this.notification.create('success', res.message, 'Tài khoản của bạn đã được đăng ký thành công! Vui lòng đăng nhập!');
+      }, (err) => {
+        this.notification.create('error', 'Lỗi', err.error.message);
       })
     } else {
       Object.values(this.validateForm.controls).forEach(control => {

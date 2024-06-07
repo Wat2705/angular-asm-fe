@@ -1,10 +1,13 @@
+import { jwtDecode } from 'jwt-decode';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,8 @@ import { AuthService } from '../auth.service';
     NzInputModule,
     NzButtonModule,
     NzIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzNotificationModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -35,13 +39,21 @@ export class LoginComponent {
     if (this.validateForm.valid) {
       this.auth.logIn(this.validateForm.value).subscribe(
         (res: any) => {
-
+          localStorage.setItem('token', res.token)
+          this.notification.create('success', 'Thành công!', res.message, { nzDuration: 1000 });
+          let token: any = localStorage.getItem('token')
+          let decoded: any = jwtDecode(token)
+          console.log(decoded['role'])
+          if (decoded['role'] == 'nhanvien') {
+            this.router.navigate(['/staff/home'])
+          } else if (decoded['role'] == 'leader') {
+            this.router.navigate(['/admin/home'])
+          }
         },
         (err) => {
-
+          this.notification.create('error', 'Lỗi!', err.error.message, { nzDuration: 1000 });
         }
       )
-      console.log('submit', this.validateForm.value);
     } else {
       Object.values(this.validateForm.controls).forEach(control => {
         if (control.invalid) {
@@ -52,5 +64,10 @@ export class LoginComponent {
     }
   }
 
-  constructor(private fb: NonNullableFormBuilder, private auth: AuthService) { }
+  constructor(
+    private fb: NonNullableFormBuilder,
+    private auth: AuthService,
+    private notification: NzNotificationService,
+    private router: Router
+  ) { }
 }

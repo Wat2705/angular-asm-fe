@@ -1,4 +1,4 @@
-<a routerLink="/add">
+<a routerLink="/admin/add">
     <button nz-button nzType="primary">Add</button>
 </a>
 <br />
@@ -32,7 +32,7 @@
                 }
             </td>
             <td (click)="$event.stopPropagation()">
-                <a [routerLink]="['/edit', data._id]">Edit</a>
+                <a [routerLink]="['/admin/edit', data._id]">Edit</a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc không?" nzOkText="OK" nzCancelText="Cancel"
                     (nzOnConfirm)="confirm(data._id)" (nzOnCancel)="cancel()">

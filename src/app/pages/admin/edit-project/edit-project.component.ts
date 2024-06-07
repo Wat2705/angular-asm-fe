@@ -97,7 +97,7 @@ export class EditProjectComponent {
             (res: any) => {
               if (res.message == 'ok') {
                 this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-                this.router.navigate(['/home'])
+                this.router.navigate(['/admin/home'])
               }
             },
             (err: any) => {
@@ -118,7 +118,7 @@ export class EditProjectComponent {
           (res: any) => {
             if (res.message == 'ok') {
               this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-              this.router.navigate(['/home'])
+              this.router.navigate(['/admin/home'])
             }
           },
           (err: any) => {
@@ -138,7 +138,7 @@ export class EditProjectComponent {
           (res: any) => {
             if (res.message == 'ok') {
               this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-              this.router.navigate(['/home'])
+              this.router.navigate(['/admin/home'])
             }
           },
           (err: any) => {

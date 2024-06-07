@@ -51,9 +51,6 @@ export class ProjectListComponent {
       .subscribe(
         (res: any) => {
           this.listOfData = this.listOfData.filter((e: any) => e._id != id)
-        },
-        (err) => {
-          console.log(err)
         }
       )
     this.message.success('Xóa thành công!');
@@ -68,7 +65,10 @@ export class ProjectListComponent {
         <p>Team Size: ${data.teamSize}</p>
         <p>Price: ${data.price}</p>
         <p>Description: ${data.description}</p>
-        ${data.image != undefined ? `<img class='object-cover' src='${data.image.base64}'/>` : ''}
+        
+        ${data.image != undefined ? `<p>Image: </p>
+          <img class='object-cover w-36' src='http://localhost:3000/${data.image.path}'/>
+          ` : ''}
       `,
     });
   }

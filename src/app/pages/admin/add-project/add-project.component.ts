@@ -70,7 +70,6 @@ export class AddProjectComponent {
   }
 
   submitForm(): void {
-    console.log(this.validateForm.value.teamSize)
     if (this.avatarUrl != '') {
       let formData = new FormData();
       formData.append('image', this.fileData)
@@ -86,11 +85,10 @@ export class AddProjectComponent {
           (res: any) => {
             if (res.message == 'ok') {
               this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-              this.router.navigate(['/home'])
+              this.router.navigate(['/admin/home'])
             }
           },
           (err: any) => {
-            console.log(err)
             this.notification.create('error', err.error.message, '', { nzDuration: 1000 });
           }
         )
@@ -107,7 +105,7 @@ export class AddProjectComponent {
         (res: any) => {
           if (res.message == 'ok') {
             this.notification.create('success', 'Tạo thành công!', '', { nzDuration: 1000 });
-            this.router.navigate(['/home'])
+            this.router.navigate(['/admin/home'])
           }
         },
         (err: any) => {
