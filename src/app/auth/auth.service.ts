@@ -15,4 +15,8 @@ export class AuthService {
   logIn(data: any) {
     return this.http.post(this.url + '/login', data)
   }
+
+  getAllDev() {
+    return this.http.get(this.url + '/getdev')
+  }
 }

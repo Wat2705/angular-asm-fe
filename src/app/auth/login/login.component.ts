@@ -43,7 +43,6 @@ export class LoginComponent {
           this.notification.create('success', 'Thành công!', res.message, { nzDuration: 1000 });
           let token: any = localStorage.getItem('token')
           let decoded: any = jwtDecode(token)
-          console.log(decoded['role'])
           if (decoded['role'] == 'nhanvien') {
             this.router.navigate(['/staff/home'])
           } else if (decoded['role'] == 'leader') {

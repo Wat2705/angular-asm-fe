@@ -1,1 +1,59 @@
-<p>add-task works!</p>
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Task Name</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Không được để trống tên dự án!">
+            <input class="w-1/2" nz-input formControlName="taskName" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7">Description</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <textarea class="w-1/2" rows="4" formControlName="desc" nz-input></textarea>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Project</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Chọn 1 project!">
+            <nz-select formControlName="projectID" class="rounded-lg py-2 !w-1/2" nzShowSearch nzAllowClear
+                nzPlaceHolder="Chọn 1 project">
+                @for (item of listProject; track item._id) {
+                <nz-option nzLabel={{item?.name}} nzValue={{item?._id}}></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Assign To</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Chọn người thực hiện task!">
+            <nz-select formControlName="assign" class="rounded-lg py-2 !w-1/2" nzShowSearch nzAllowClear
+                nzPlaceHolder="Chọn người thực hiện task">
+                @for (item of listDev; track item._id) {
+                <nz-option nzLabel={{item?.name}} nzValue={{item?._id}}></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7" nzRequired>Priority</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Chọn mức độ ưu tiên!">
+            <nz-select formControlName="priority" class="rounded-lg py-2 !w-1/2" nzShowSearch nzAllowClear
+                nzPlaceHolder="Chọn mức độ ưu tiên">
+                <nz-option nzLabel="Low" nzValue="Low"></nz-option>
+                <nz-option nzLabel="Medium" nzValue="Medium"></nz-option>
+                <nz-option nzLabel="High" nzValue="High"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="7">Status</nz-form-label>
+        <nz-form-control [nzSpan]="12">
+            <input class="w-1/2" nz-input formControlName="status" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+            <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
+            <button nz-button (click)="resetForm($event)">Reset</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>

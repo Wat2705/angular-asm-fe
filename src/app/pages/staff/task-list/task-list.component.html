@@ -1,1 +1,40 @@
-<p>task-list works!</p>
+<a routerLink="/staff/add">
+    <button nz-button nzType="primary">Add</button>
+</a>
+<br />
+<br />
+<nz-table #basicTable [nzData]="listOfData" [nzPageSize]="5" [nzPaginationType]="'small'">
+    <thead>
+        <tr>
+            <th>Task ID</th>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>In Project</th>
+            <th>Assign To</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (data of basicTable.data; track data.key) {
+        <tr>
+            <td>{{ data._id }}</td>
+            <td>{{ data.name }}</td>
+            <td>{{ data.description }}</td>
+            <td>{{data.project.name}}</td>
+            <td>{{data.assign.name}}</td>
+            <td>{{data.priority}}</td>
+            <td>{{data.status}}</td>
+            <td (click)="$event.stopPropagation()">
+                <a [routerLink]="['/staff/edit', data._id]">Edit</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc không?" nzOkText="OK" nzCancelText="Cancel"
+                    (nzOnConfirm)="confirm(data._id)" (nzOnCancel)="cancel()">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

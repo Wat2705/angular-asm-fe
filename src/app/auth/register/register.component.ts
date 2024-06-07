@@ -28,7 +28,6 @@ export class RegisterComponent {
   password?: string;
 
   updateConfirmValidator(): void {
-    /** wait for refresh value */
     Promise.resolve().then(() => this.validateForm.controls.rePassword.updateValueAndValidity());
   }
 

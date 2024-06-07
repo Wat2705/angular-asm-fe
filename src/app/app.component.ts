@@ -22,7 +22,7 @@ export class AppComponent {
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
       if (localStorage?.getItem('token') == null) {
-        this.router.navigate(['/auth/register'])
+        this.router.navigate(['/auth/login'])
       } else {
         let token: any = localStorage?.getItem('token');
         let decoded: any = jwtDecode(token);
