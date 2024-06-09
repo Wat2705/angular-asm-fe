@@ -66,7 +66,7 @@ export class ProjectListComponent {
         <p>Name: ${data.name}</p>
         <p>Start Date: ${data.startDate}</p>
         <p>Team Size: ${data.teamSize}</p>
-        <p>Price: ${data.price}</p>
+        <p>Price: $${data.price}</p>
         <p>Description: ${data.description}</p>
         
         ${data.image != undefined ? `<p>Image: </p>

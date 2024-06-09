@@ -78,7 +78,8 @@ export class EditProjectComponent {
       dayjs(this.validateForm.value.datePicker).format('YYYY-MM-DD') != this.project.startDate ||
       this.validateForm.value.teamSize != this.project.teamSize ||
       this.validateForm.value.price != this.project.price ||
-      this.imageChange
+      this.imageChange ||
+      this.validateForm.value.desc != this.project.description
     ) {
       if (this.avatarUrl != '' && this.imageChange) {
         let formData = new FormData();
@@ -165,7 +166,7 @@ export class EditProjectComponent {
       projectName: ['', [Validators.required]],
       datePicker: ['', [Validators.required]],
       teamSize: [1, [Validators.min(1), Validators.max(10)]],
-      price: ['', [Validators.required]],
+      price: ['', [Validators.required, Validators.min(1)]],
       desc: ['']
     });
   }

@@ -48,7 +48,7 @@ export class AddProjectComponent {
     projectName: FormControl<string>;
     datePicker: FormControl<string>;
     teamSize: FormControl<number>;
-    price: FormControl<string>;
+    price: FormControl<number>;
     desc: FormControl<string>;
   }>;
 
@@ -62,7 +62,7 @@ export class AddProjectComponent {
       projectName: ['', [Validators.required]],
       datePicker: ['', [Validators.required]],
       teamSize: [1, [Validators.min(1), Validators.max(10)]],
-      price: ['', [Validators.required]],
+      price: [0, [Validators.required, Validators.min(0)]],
       desc: [''],
     });
   }

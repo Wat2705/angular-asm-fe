@@ -7,6 +7,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -60,6 +61,7 @@ export class RegisterComponent {
     if (this.validateForm.valid) {
       this.auth.register(this.validateForm.value).subscribe((res: any) => {
         this.notification.create('success', res.message, 'Tài khoản của bạn đã được đăng ký thành công! Vui lòng đăng nhập!');
+        this.router.navigate(['/auth/login'])
       }, (err) => {
         this.notification.create('error', 'Lỗi', err.error.message);
       })
@@ -73,5 +75,10 @@ export class RegisterComponent {
     }
   }
 
-  constructor(private fb: NonNullableFormBuilder, private auth: AuthService, private notification: NzNotificationService) { }
+  constructor(
+    private fb: NonNullableFormBuilder,
+    private auth: AuthService,
+    private notification: NzNotificationService,
+    private router: Router
+  ) { }
 }

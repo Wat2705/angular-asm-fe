@@ -21,9 +21,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
-      if (localStorage?.getItem('token') == null) {
-        this.router.navigate(['/auth/login'])
-      } else {
+      if (localStorage?.getItem('token') != null) {
         let token: any = localStorage?.getItem('token');
         let decoded: any = jwtDecode(token);
         if (decoded['role'] == 'nhanvien') {
@@ -31,6 +29,8 @@ export class AppComponent {
         } else if (decoded['role'] == 'leader') {
           this.router.navigate(['/admin'])
         }
+      } else {
+        this.router.navigate(['/auth/login'])
       }
     }
   }

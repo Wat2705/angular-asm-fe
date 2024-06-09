@@ -13,6 +13,12 @@
                     <li nz-menu-item nzMatchRouter>
                         <a routerLink="/staff/home">Trang chủ</a>
                     </li>
+                    <li nz-menu-item>
+                        <a nz-popconfirm nzPopconfirmTitle="Log Out?" nzPopconfirmPlacement="bottomRight"
+                            (nzOnConfirm)="confirm()" (nzOnCancel)="cancel()">
+                            Exit
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
